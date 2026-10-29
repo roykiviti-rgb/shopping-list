@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only these Google accounts can read or change the lists.
+    function isMember() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in [
+          'roikiviti11111@gmail.com',
+          'PARTNER_EMAIL@gmail.com'
+        ];
+    }
+
+    match /lists/{listId} {
+      allow read, write: if isMember();
+
+      match /items/{itemId} {
+        allow read, write: if isMember();
+      }
+    }
+  }
+}
