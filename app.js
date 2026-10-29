@@ -115,6 +115,8 @@ function watchLists() {
     }
 
     if (!lists.some((l) => l.id === currentListId)) selectList(lists[0].id);
+    // The remembered list from localStorage still exists, but nothing is listening to its items yet.
+    else if (!unsubItems) selectList(currentListId);
     else renderListSelect();
   }, onError);
 }
